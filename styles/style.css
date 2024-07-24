@@ -27,6 +27,7 @@
     border-radius: 20px;
     margin: 10px 0;
     user-select: none;
+    transition: 0.1s linear border;
   }
   input,
   select,
@@ -35,10 +36,10 @@
     outline: none;
     border: none;
     background-color: var(--color-4);
-    color: var(--color-3);
   }
-  *::placeholder {
+  button {
     color: var(--color-3);
+    font-weight: bold;
   }
   .diff {
     display: flex;

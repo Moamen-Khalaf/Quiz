@@ -11,7 +11,6 @@
       <input type="text" name="usn" placeholder="Name" />
       <select name="category">
         <option selected disabled>Categories</option>
-        <option value="">JS</option>
       </select>
       <input
         type="number"
@@ -23,20 +22,21 @@
       <div class="diff">
         <label>Difficalty</label>
         <div>
-          <input type="radio" name="diff" id="easy" />
+          <input type="radio" name="diff" id="easy" value="easy" />
           <label for="easy">Easy</label>
         </div>
         <div>
-          <input type="radio" name="diff" id="medium" />
+          <input type="radio" name="diff" id="medium" value="medium" />
           <label for="medium">Medium</label>
         </div>
         <div>
-          <input type="radio" name="diff" id="hard" />
+          <input type="radio" name="diff" id="hard" value="hard" />
           <label for="hard">Hard</label>
         </div>
       </div>
       <button type="button">Start</button>
     </div>
-    <script src="scripts/index.js"></script>
+    <script src="scripts/layout.js" type="module"></script>
+    <script src="scripts/index.js" type="module"></script>
   </body>
 </html>
