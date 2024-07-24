@@ -4,20 +4,132 @@ export const APIEndPoints = {
   tags: "https://quizapi.io//api/v1/tags",
   apiKey: "k5tj3FRfAipGkIHiAAf7xFQojwOOJsdmajmxu0g6",
 };
-export async function startQuiz(usn, category, questionsLimit, diff) {
+let QUIZ;
+class Quiz {
+  constructor(questions, questionCategory, questionDiff) {
+    this.questions = [];
+    for (const element of questions) {
+      let { question, answers, correct_answers } = element;
+      answers = Object.values(answers).filter((ele) => {
+        return ele;
+      });
+      correct_answers = Object.values(correct_answers);
+      this.questions.push({
+        question,
+        answers,
+        correct_answers: [...correct_answers],
+        answer: 0,
+      });
+    }
+    this.questionCategory = questionCategory;
+    this.questionCount = this.questions.length;
+    this.questionDiff = questionDiff;
+    this.score = 0;
+    this.currentQ = 0;
+    this.questionElement = this.createQuestion(this.questions[this.currentQ]);
+  }
+  next() {
+    this.questionElement.remove();
+    if (this.currentQ < this.questionCount - 1) {
+      this.questionElement = this.createQuestion(
+        this.questions[++this.currentQ]
+      );
+    } else {
+      this.showScore();
+    }
+  }
+  previous() {
+    if (this.currentQ > 0) {
+      this.questionElement.remove();
+      this.questionElement = this.createQuestion(
+        this.questions[--this.currentQ]
+      );
+    }
+  }
+  showScore() {
+    for (const element of this.questions) {
+      this.score += element.correct_answers[+element.answer] === "true";
+    }
+    let scoreCont = document.createElement("div");
+    scoreCont.className = "quiz";
+    let scoreHead = document.createElement("h3");
+    scoreHead.className = "question";
+    scoreHead.textContent = `Your Score is ${this.score} from ${this.questionCount}`;
+    scoreCont.appendChild(scoreHead);
+    document.body.appendChild(scoreCont);
+  }
+  createQuestion(question) {
+    let quiz = document.createElement("div");
+    quiz.className = "quiz";
+    let questionHead = document.createElement("h3");
+    questionHead.className = "question";
+    questionHead.textContent = question.question;
+    quiz.appendChild(questionHead);
+    let answers = document.createElement("div");
+    answers.className = "answers";
+    for (const element of Object.entries(question.answers)) {
+      if (element[1]) {
+        let ansContainer = document.createElement("div");
+        let ans = document.createElement("input");
+        ans.type = "radio";
+        ans.name = "answer";
+        ans.id = element[0];
+        let ansLabel = document.createElement("label");
+        ansLabel.setAttribute("for", element[0]);
+        ansLabel.textContent = element[1];
+        ansContainer.appendChild(ans);
+        ansContainer.appendChild(ansLabel);
+        answers.appendChild(ansContainer);
+      }
+    }
+    let buttons = document.createElement("div");
+    buttons.className = "move";
+    let prev = document.createElement("button");
+    prev.type = "button";
+    prev.addEventListener("click", () => {
+      this.previous();
+    });
+    prev.textContent = "Previous";
+    let next = document.createElement("button");
+    next.type = "button";
+    if (this.currentQ === this.questionCount - 1) {
+      next.textContent = "Submit";
+    } else {
+      next.textContent = "Next";
+    }
+    next.addEventListener("click", () => {
+      let checked = false;
+      let inputs = answers.querySelectorAll("input");
+      inputs.forEach((ele) => {
+        checked |= ele.checked;
+      });
+      if (checked) {
+        let selected = answers.querySelector("input:checked").id;
+        this.questions[this.currentQ].answer = +selected;
+        this.next();
+      }
+    });
+    buttons.appendChild(prev);
+    buttons.appendChild(next);
+    quiz.appendChild(answers);
+    quiz.appendChild(buttons);
+    document.body.appendChild(quiz);
+    return quiz;
+  }
+}
+export async function startQuiz(category, questionsLimit, diff) {
   try {
     let url = new URL(APIEndPoints.questions);
     url.searchParams.append("apiKey", APIEndPoints.apiKey);
     url.searchParams.append("limit", questionsLimit);
     url.searchParams.append("category", category);
     url.searchParams.append("difficulty", diff);
-    console.log(url.href);
     let response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.status}`);
     }
     let data = await response.json();
-    console.log(data);
+    QUIZ = new Quiz(data, category, diff);
   } catch (error) {
     console.log("Error:", error);
   }

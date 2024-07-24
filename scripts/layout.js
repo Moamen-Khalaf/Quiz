@@ -37,10 +37,5 @@ UI.loginCont.querySelector("button").onclick = () => {
     return false;
   }
   UI.loginCont.style.display = "none";
-  startQuiz(
-    UI.usn.value,
-    UI.categories.value,
-    UI.questionsLimit.value,
-    UI.diff.value
-  );
+  startQuiz(UI.categories.value, UI.questionsLimit.value, UI.diff.value);
 };

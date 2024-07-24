@@ -7,6 +7,7 @@ body {
   padding: 0 1rem;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: var(--color-2);
@@ -62,10 +63,11 @@ body {
   }
 }
 .quiz {
-  /* display: flex; */
-  display: none;
+  display: flex;
+  /* display: none; */
   flex-direction: column;
   max-width: 500px;
+  min-width: 300px;
   justify-content: space-between;
   /* margin: 10vh auto 0 auto; */
   /* padding: 0 1rem; */
@@ -116,6 +118,7 @@ body {
       border-radius: 20px;
       background-color: var(--color-2);
       transition-duration: 0.4s;
+      padding-right: 1rem;
       label {
         padding: 1rem 0;
         flex: 1;
