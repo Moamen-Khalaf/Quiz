@@ -3,6 +3,14 @@
   margin: 0;
   padding: 0;
 }
+body {
+  padding: 0 1rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-2);
+}
 :root {
   /* #222831
     #393E46
@@ -15,10 +23,10 @@
 }
 .login {
   display: flex;
+  /* display: none; */
   flex-direction: column;
-  max-width: 500px;
+  max-width: 600px;
   justify-content: space-between;
-  margin: 30vh auto 0 auto;
   padding: 1rem;
   color: var(--color-4);
   border-radius: 20px;
@@ -45,5 +53,76 @@
     display: flex;
     max-width: 300px;
     justify-content: space-between;
+    gap: 1rem;
+    div {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
+}
+.quiz {
+  /* display: flex; */
+  display: none;
+  flex-direction: column;
+  max-width: 500px;
+  justify-content: space-between;
+  /* margin: 10vh auto 0 auto; */
+  /* padding: 0 1rem; */
+  color: var(--color-4);
+  border-radius: 20px;
+  background-color: var(--color-1);
+  > * {
+    border-radius: 20px;
+    user-select: none;
+    transition: 0.1s linear border;
+  }
+  .question,
+  .move {
+    padding: 0 1rem;
+    margin: 1rem 0;
+    margin-bottom: 2rem;
+    /* margin-top: 2rem; */
+  }
+  .move {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    button {
+      flex: 1;
+      padding: 1rem;
+      color: var(--color-4);
+      border-radius: 20px;
+      background-color: var(--color-3);
+      border: none;
+      font-weight: 700;
+    }
+    button:hover {
+      color: var(--color-3);
+      background-color: var(--color-4);
+    }
+  }
+  input[type="radio"]:checked + label {
+    color: var(--color-3);
+  }
+  .answers {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    gap: 0.5rem;
+    div {
+      display: flex;
+      align-items: center;
+      border-radius: 20px;
+      background-color: var(--color-2);
+      transition-duration: 0.4s;
+      label {
+        padding: 1rem 0;
+        flex: 1;
+      }
+      input {
+        flex-basis: 40px;
+      }
+    }
   }
 }
