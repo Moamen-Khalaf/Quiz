@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <title>API</title>
+  </head>
+  <body>
+    <div class="login">
+      <input type="text" name="usn" placeholder="Name" />
+      <select name="category">
+        <option selected disabled>Categories</option>
+        <option value="">JS</option>
+      </select>
+      <input
+        type="number"
+        name="limit"
+        max="20"
+        min="0"
+        placeholder="Questions Limit"
+      />
+      <div class="diff">
+        <label>Difficalty</label>
+        <div>
+          <input type="radio" name="diff" id="easy" />
+          <label for="easy">Easy</label>
+        </div>
+        <div>
+          <input type="radio" name="diff" id="medium" />
+          <label for="medium">Medium</label>
+        </div>
+        <div>
+          <input type="radio" name="diff" id="hard" />
+          <label for="hard">Hard</label>
+        </div>
+      </div>
+      <button type="button">Start</button>
+    </div>
+    <script src="scripts/index.js"></script>
+  </body>
+</html>
