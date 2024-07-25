@@ -189,7 +189,7 @@ export async function startQuiz(category, questionsLimit, diff) {
 }
 
 window.onbeforeunload = () => {
-  if (QUIZ) {
+  if (QUIZ && QUIZ.time > 0) {
     QUIZ.saveCurrent();
     window.sessionStorage.setItem("userData", JSON.stringify(QUIZ));
   }
