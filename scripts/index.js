@@ -6,6 +6,7 @@ export const APIEndPoints = {
 };
 let QUIZ = null;
 class Quiz {
+  scoreShown = false;
   constructor(questions, questionCategory, questionDiff) {
     if (questions && questionCategory && questionDiff) {
       this.questions = [];
@@ -76,6 +77,7 @@ class Quiz {
     }, 1000);
   }
   showScore() {
+    this.scoreShown = true;
     if (this.questionElement) {
       this.questionElement.remove();
     }
@@ -189,7 +191,7 @@ export async function startQuiz(category, questionsLimit, diff) {
 }
 
 window.onbeforeunload = () => {
-  if (QUIZ && QUIZ.time > 0) {
+  if (QUIZ && QUIZ.time > 0 && !QUIZ.scoreShown) {
     QUIZ.saveCurrent();
     window.sessionStorage.setItem("userData", JSON.stringify(QUIZ));
   }
