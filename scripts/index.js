@@ -26,7 +26,7 @@ class Quiz {
     this.questionDiff = questionDiff;
     this.score = 0;
     this.currentQ = 0;
-    this.time = this.questionCount * 10;
+    this.time = this.questionCount * 30;
     this.startTimer();
     this.questionElement = this.createQuestion(this.questions[this.currentQ]);
   }
