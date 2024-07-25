@@ -18,7 +18,7 @@ class Quiz {
         question,
         answers,
         correct_answers: [...correct_answers],
-        answer: 0,
+        answer: null,
       });
     }
     this.questionCategory = questionCategory;
@@ -34,7 +34,7 @@ class Quiz {
       this.questionElement = this.createQuestion(
         this.questions[++this.currentQ]
       );
-      if (this.questions[this.currentQ].answer) {
+      if (this.questions[this.currentQ].answer != null) {
         this.questionElement.querySelector(
           `.answers div:nth-child(${
             this.questions[this.currentQ].answer + 1
