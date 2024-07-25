@@ -26,6 +26,8 @@ class Quiz {
     this.questionDiff = questionDiff;
     this.score = 0;
     this.currentQ = 0;
+    this.time = this.questionCount * 10;
+    this.startTimer();
     this.questionElement = this.createQuestion(this.questions[this.currentQ]);
   }
   next() {
@@ -42,7 +44,7 @@ class Quiz {
         ).checked = true;
       }
     } else {
-      this.showScore();
+      return this.showScore();
     }
   }
   previous() {
@@ -53,9 +55,26 @@ class Quiz {
       );
     }
   }
+  startTimer() {
+    let timerInterval = setInterval(() => {
+      let timer = this.questionElement.querySelector(".question :last-child");
+      timer.textContent = this.time-- + "s";
+      if (this.time < 0) {
+        clearInterval(timerInterval);
+        let selected = document.querySelector(".quiz input:checked");
+        if (selected) {
+          this.questions[this.currentQ].answer = selected.id;
+        }
+        this.questionElement.remove();
+        this.showScore();
+      }
+    }, 1000);
+  }
   showScore() {
     for (const element of this.questions) {
-      this.score += element.correct_answers[+element.answer] === "true";
+      if (element.answer != null) {
+        this.score += element.correct_answers[+element.answer] === "true";
+      }
     }
     let scoreCont = document.createElement("div");
     scoreCont.className = "quiz";
@@ -64,6 +83,7 @@ class Quiz {
     scoreHead.textContent = `Your Score is ${this.score} from ${this.questionCount}`;
     scoreCont.appendChild(scoreHead);
     document.body.appendChild(scoreCont);
+    return this.score;
   }
   createQuestion(question) {
     let quiz = document.createElement("div");
@@ -72,7 +92,8 @@ class Quiz {
     questionHead.className = "question";
     questionHead.innerHTML =
       `<span>${+this.currentQ + 1}/${this.questionCount}</span>` +
-      `<span>${question.question}</span>`;
+      `<span>${question.question}</span>` +
+      `<span>${this.time}s</span>`;
     quiz.appendChild(questionHead);
     let answers = document.createElement("div");
     answers.className = "answers";

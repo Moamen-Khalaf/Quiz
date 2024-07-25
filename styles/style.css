@@ -82,10 +82,22 @@ body {
   .question {
     font-size: 1.2rem;
     align-items: center;
+    justify-content: space-between;
   }
-  .question :first-child {
+  .question :first-child,
+  .question :last-child {
     color: var(--color-3);
     font-weight: bold;
+    /* width: 40px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    aspect-ratio: 1 / 1;
+  }
+  .question :last-child {
+    background-color: var(--color-2);
+    border-radius: 50%;
   }
   .question,
   .move {
