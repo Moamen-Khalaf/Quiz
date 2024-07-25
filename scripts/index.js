@@ -191,6 +191,7 @@ export async function startQuiz(category, questionsLimit, diff) {
 }
 
 window.onbeforeunload = () => {
+  window.sessionStorage.clear();
   if (QUIZ && QUIZ.time > 0 && !QUIZ.scoreShown) {
     QUIZ.saveCurrent();
     window.sessionStorage.setItem("userData", JSON.stringify(QUIZ));
