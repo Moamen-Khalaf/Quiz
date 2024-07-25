@@ -4,34 +4,40 @@ export const APIEndPoints = {
   tags: "https://quizapi.io//api/v1/tags",
   apiKey: "k5tj3FRfAipGkIHiAAf7xFQojwOOJsdmajmxu0g6",
 };
-let QUIZ;
+let QUIZ = null;
 class Quiz {
   constructor(questions, questionCategory, questionDiff) {
-    this.questions = [];
-    for (const element of questions) {
-      let { question, answers, correct_answers } = element;
-      answers = Object.values(answers).filter((ele) => {
-        return ele;
-      });
-      correct_answers = Object.values(correct_answers);
-      this.questions.push({
-        question,
-        answers,
-        correct_answers: [...correct_answers],
-        answer: null,
-      });
+    if (questions && questionCategory && questionDiff) {
+      this.questions = [];
+      for (const element of questions) {
+        let { question, answers, correct_answers } = element;
+        answers = Object.values(answers).filter((ele) => {
+          return ele;
+        });
+        correct_answers = Object.values(correct_answers);
+        this.questions.push({
+          question,
+          answers,
+          correct_answers: [...correct_answers],
+          answer: null,
+        });
+      }
+      this.questionCategory = questionCategory;
+      this.questionCount = this.questions.length;
+      this.questionDiff = questionDiff;
+      this.score = 0;
+      this.currentQ = 0;
+      this.time = this.questionCount * 30;
+      this.questionElement = this.createQuestion(this.questions[this.currentQ]);
     }
-    this.questionCategory = questionCategory;
-    this.questionCount = this.questions.length;
-    this.questionDiff = questionDiff;
-    this.score = 0;
-    this.currentQ = 0;
-    this.time = this.questionCount * 30;
-    this.startTimer();
-    this.questionElement = this.createQuestion(this.questions[this.currentQ]);
+  }
+  saveCurrent() {
+    let selected = document.querySelector(".quiz input:checked");
+    if (selected) {
+      this.questions[this.currentQ].answer = +selected.id;
+    }
   }
   next() {
-    this.questionElement.remove();
     if (this.currentQ < this.questionCount - 1) {
       this.questionElement = this.createQuestion(
         this.questions[++this.currentQ]
@@ -49,7 +55,6 @@ class Quiz {
   }
   previous() {
     if (this.currentQ > 0) {
-      this.questionElement.remove();
       this.questionElement = this.createQuestion(
         this.questions[--this.currentQ]
       );
@@ -86,6 +91,9 @@ class Quiz {
     return this.score;
   }
   createQuestion(question) {
+    if (this.questionElement) {
+      this.questionElement.remove();
+    }
     let quiz = document.createElement("div");
     quiz.className = "quiz";
     let questionHead = document.createElement("div");
@@ -171,7 +179,38 @@ export async function startQuiz(category, questionsLimit, diff) {
     }
     let data = await response.json();
     QUIZ = new Quiz(data, category, diff);
+    QUIZ.startTimer();
   } catch (error) {
     console.log("Error:", error);
   }
 }
+
+window.onbeforeunload = () => {
+  if (QUIZ) {
+    QUIZ.saveCurrent();
+    window.sessionStorage.setItem("userData", JSON.stringify(QUIZ));
+  }
+};
+window.onload = () => {
+  const data = window.sessionStorage.getItem("userData");
+  if (data) {
+    const parsedData = JSON.parse(data);
+    if (parsedData.time < 0) {
+      window.sessionStorage.clear();
+      return;
+    }
+    document.querySelector(".login").style.display = "none";
+    QUIZ = new Quiz(
+      parsedData.questions,
+      parsedData.questionCategory,
+      parsedData.questionDiff
+    );
+    QUIZ.score = parsedData.score;
+    QUIZ.currentQ = parsedData.currentQ;
+    QUIZ.time = parsedData.time;
+    QUIZ.questions = parsedData.questions;
+    QUIZ.questionElement = QUIZ.createQuestion(QUIZ.questions[QUIZ.currentQ]);
+    QUIZ.startTimer();
+    console.log("Successed");
+  }
+};
