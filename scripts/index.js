@@ -68,9 +68,11 @@ class Quiz {
   createQuestion(question) {
     let quiz = document.createElement("div");
     quiz.className = "quiz";
-    let questionHead = document.createElement("h3");
+    let questionHead = document.createElement("div");
     questionHead.className = "question";
-    questionHead.textContent = question.question;
+    questionHead.innerHTML =
+      `<span>${+this.currentQ + 1}/${this.questionCount}</span>` +
+      `<span>${question.question}</span>`;
     quiz.appendChild(questionHead);
     let answers = document.createElement("div");
     answers.className = "answers";
