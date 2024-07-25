@@ -101,11 +101,13 @@ class Quiz {
         this.questions[this.currentQ].answer = +selected.id;
       }
       this.previous();
-      this.questionElement.querySelector(
-        `.answers div:nth-child(${
-          this.questions[this.currentQ].answer + 1
-        }) input`
-      ).checked = true;
+      if (this.questions[this.currentQ].answer != null) {
+        this.questionElement.querySelector(
+          `.answers div:nth-child(${
+            this.questions[this.currentQ].answer + 1
+          }) input`
+        ).checked = true;
+      }
     });
     prev.textContent = "Previous";
     let next = document.createElement("button");
