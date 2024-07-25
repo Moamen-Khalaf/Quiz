@@ -34,6 +34,13 @@ class Quiz {
       this.questionElement = this.createQuestion(
         this.questions[++this.currentQ]
       );
+      if (this.questions[this.currentQ].answer) {
+        this.questionElement.querySelector(
+          `.answers div:nth-child(${
+            this.questions[this.currentQ].answer + 1
+          }) input`
+        ).checked = true;
+      }
     } else {
       this.showScore();
     }
@@ -87,7 +94,16 @@ class Quiz {
     let prev = document.createElement("button");
     prev.type = "button";
     prev.addEventListener("click", () => {
+      let selected = answers.querySelector("input:checked");
+      if (selected) {
+        this.questions[this.currentQ].answer = +selected.id;
+      }
       this.previous();
+      this.questionElement.querySelector(
+        `.answers div:nth-child(${
+          this.questions[this.currentQ].answer + 1
+        }) input`
+      ).checked = true;
     });
     prev.textContent = "Previous";
     let next = document.createElement("button");
