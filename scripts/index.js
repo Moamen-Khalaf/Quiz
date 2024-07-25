@@ -76,6 +76,9 @@ class Quiz {
     }, 1000);
   }
   showScore() {
+    if (this.questionElement) {
+      this.questionElement.remove();
+    }
     for (const element of this.questions) {
       if (element.answer != null) {
         this.score += element.correct_answers[+element.answer] === "true";
